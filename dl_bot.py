@@ -9,8 +9,8 @@ downloads = []
 progress = []
 WELCOME_MESSAGE = 'Hi! Welcome to the download bot. Here are the available commands:\n1. /download <link> - Download the given file on the local machine. \n2. /progress - Display the progress of the download \n3. /help - Display available commands'
 HELP_MESSAGE = 'Here are the available commands:\n1. /download <link> - Download the given file on the local machine. \n2. /progress - Display the progress of the download \n3. /help - Display available commands'
-
-bot = telepot.Bot('470225186:AAHY5h4DmqfSl12o9rrFH2FOlGev4E_X5XU')
+KEY = sys.argv[1]
+bot = telepot.Bot(KEY)
 
 def download(link, index = None):
 	file_name = link.split('/')[-1]

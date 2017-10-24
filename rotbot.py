@@ -4,7 +4,8 @@ import time
 from pprint import pprint
 from telepot.loop import MessageLoop
 import string
-bot = telepot.Bot('470225186:AAHY5h4DmqfSl12o9rrFH2FOlGev4E_X5XU')
+KEY = sys.argv[1]
+bot = telepot.Bot(KEY)
 def rot13(text):
 	#Replace 'str' with 'string' in python2
 	rot13_trans = str.maketrans( 
@@ -24,6 +25,6 @@ def handle(msg):
 		print(rot13_text)
 		bot.sendMessage(sender_id, rot13_text)
 
-MessageLoop(bot, handle).run_as_thread()
-while 1:
-    time.sleep(10)
+# MessageLoop(bot, handle).run_as_thread()
+# while 1:
+#     time.sleep(10)
