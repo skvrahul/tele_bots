@@ -15,13 +15,15 @@ def rot13(text):
 def handle(msg):
 	msg_text = msg['text']
 	sender_id = msg['from']['id']
-	pprint(msg)
+	#pprint(msg)
 	if(msg_text.startswith('/rot13 ')):
 		#Send back ROT13 of the text
+		print(msg)
 		text = msg_text[7:]
 		rot13_text = rot13(text)
+		print(rot13_text)
 		bot.sendMessage(sender_id, rot13_text)
-		
+
 MessageLoop(bot, handle).run_as_thread()
 while 1:
     time.sleep(10)
