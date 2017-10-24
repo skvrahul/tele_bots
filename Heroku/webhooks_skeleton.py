@@ -10,6 +10,13 @@ def handle(msg):
 	print('Entered Handler!!!!!')
 	print(msg_text)
 	bot.sendMessage(sender_id, msg_text)
+	
+def handle_update(update):
+	if 'message' in update:
+		msg_text = update['message']['text']
+		sender_id = update['message']['from']['id']
+		print(msg_text)
+		bot.sendMessage(sender_id, msg_text)
 
 app = Flask(__name__)
 bot = telepot.Bot('470225186:AAHY5h4DmqfSl12o9rrFH2FOlGev4E_X5XU')
@@ -22,7 +29,8 @@ FULL_URL  = 'https://safe-journey-86486.herokuapp.com/testing_my_bot'
 @app.route(URL, methods=['GET', 'POST'])
 def pass_update():
 	print('Received a POST request')
-	webhook.feed(request.data)
+	update = request.get_json()
+	handle_update(update)
 	return 'OK'
 
 
