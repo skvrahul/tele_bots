@@ -4,36 +4,21 @@ from pprint import pprint
 from telepot.loop import MessageLoop
 import string
 import requests
+import sys
+from DLThread import *
 thread_no = 0
 downloads = []
-progress = []
 WELCOME_MESSAGE = 'Hi! Welcome to the download bot. Here are the available commands:\n1. /download <link> - Download the given file on the local machine. \n2. /progress - Display the progress of the download \n3. /help - Display available commands'
 HELP_MESSAGE = 'Here are the available commands:\n1. /download <link> - Download the given file on the local machine. \n2. /progress - Display the progress of the download \n3. /help - Display available commands'
 KEY = sys.argv[1]
 bot = telepot.Bot(KEY)
 
-def download(link, index = None):
-	file_name = link.split('/')[-1]
-	with open(file_name, "wb") as f:
-		print("Downloading %s" % file_name)
-		response = requests.get(link, stream=True)
-		#Checking the file header for size or 'content-length'
-		total_length = response.headers.get('content-length')
-		if total_length is None:
-			f.write(response.content)
-		else:
-			dl = 0
-			total_length = int(total_length)
-			for data in response.iter_content(chunk_size=4096):
-				dl += len(data)
-				f.write(data)
-				#Calculating percentage of file that is done downloading 
-				done = int(100 * dl / total_length)
-				print(done)
+
 def start_dl(link):
-	t = threading.Thread(target=download, kwargs={'link':link, 'index':thread_no})
-	downloads.append(thread_no)
-	thread_no += 1
+	t = DLThread(link)
+	t.start()
+	downloads.append(t)
+
 def handle(msg):
 	msg_text = msg['text']
 	sender_id = msg['from']['id']
@@ -44,11 +29,18 @@ def handle(msg):
 	elif msg_text.startswith('/download '):
 		dl_link = msg_text[10:]
 		file_name = dl_link.split('/')[-1]
-		download(dl_link)
-		bot.sendMessage(sender_id, file_name+' has been downloaded to local PC!')
+		start_dl(dl_link)
+		bot.sendMessage(sender_id, 'Starting download....\nCheck progress with /progress')
 
 	elif msg_text == '/progress':
-		pass
+		incomplete_downloads = [download for download in downloads if not download.done]
+		reply = ''
+		if len(incomplete_downloads)!=0:
+			for download in incomplete_downloads:
+				reply = reply + download.filename+'  :  '+str(download.progress)+'% \n'
+			bot.sendMessage(sender_id, reply)
+		else:
+			bot.sendMessage(sender_id ,'No downloads in progress')
 	elif msg_text == '/help':
 		#Send back available commands
 		bot.sendMessage(sender_id, HELP_MESSAGE)

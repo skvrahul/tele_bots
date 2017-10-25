@@ -10,7 +10,6 @@ def handle(msg):
 	print('Entered Handler!!!!!')
 	print(msg_text)
 	bot.sendMessage(sender_id, msg_text)
-	
 def handle_update(update):
 	if 'message' in update:
 		msg_text = update['message']['text']

@@ -25,6 +25,6 @@ def handle(msg):
 		print(rot13_text)
 		bot.sendMessage(sender_id, rot13_text)
 
-# MessageLoop(bot, handle).run_as_thread()
-# while 1:
-#     time.sleep(10)
+MessageLoop(bot, handle).run_as_thread()
+while 1:
+    time.sleep(10)
