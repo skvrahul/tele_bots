@@ -19,7 +19,7 @@ def handle(msg):
 	#pprint(msg)
 	if(msg_text.startswith('/rot13 ')):
 		#Send back ROT13 of the text
-		print(msg)
+		pprint(msg)
 		text = msg_text[7:]
 		rot13_text = rot13(text)
 		print(rot13_text)
